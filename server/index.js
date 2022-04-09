@@ -4,6 +4,7 @@ const cors = require('koa2-cors');
 const koaBody = require('koa-body');
 const fs = require('fs');
 const path = require('path');
+const { nanoid } = require('nanoid')
 
 const outputPath = path.resolve(__dirname, 'resources');
 const app = new Koa();
@@ -35,7 +36,7 @@ router.post(
     formidable: {
       uploadDir: outputPath,
       onFileBegin: (name, file) => {
-        const [filename, fileHash, index] = name.split('-');
+        const [filename, fileHash, index] = name.split('vtest-vtest');
         const dir = path.join(outputPath, filename);
         // 保存当前 chunk 信息，发生错误时进行返回
         currChunk = {
@@ -72,15 +73,20 @@ router.post(
 // 合并请求
 router.post('/api/mergeChunks', async (ctx) => {
   const { filename, size } = ctx.request.body;
+  console.log("🚀【文件名】", filename.substr(filename.lastIndexOf(".")));
   // 合并 chunks
-  await mergeFileChunk(path.join(outputPath, '_' + filename), filename, size);
-
+  const newFileName = 'test_' + nanoid() + '_test' + filename.substr(filename.lastIndexOf("."))
+  console.log(newFileName)
+  console.log(filename)
+  // return false
+  await mergeFileChunk(path.join(outputPath, newFileName), filename, size);
   // 处理响应
   ctx.set("Content-Type", "application/json");
   ctx.body = JSON.stringify({
     data: {
-      code: 2000,
+      code: 200,
       filename,
+      link: "/" + newFileName,
       size
     },
     message: 'merge chunks successful！'
@@ -107,7 +113,7 @@ const mergeFileChunk = async (filePath, filename, size) => {
   if (!chunkPaths.length) return;
 
   // 根据切片下标进行排序，否则直接读取目录的获得的顺序可能会错乱
-  chunkPaths.sort((a, b) => a.split("-")[1] - b.split("-")[1]);
+  chunkPaths.sort((a, b) => a.split("vtest-vtest")[1] - b.split("vtest-vtest")[1]);
   console.log("chunkPaths = ", chunkPaths);
 
   await Promise.all(
@@ -125,6 +131,7 @@ const mergeFileChunk = async (filePath, filename, size) => {
 
   // 合并后删除保存切片的目录
   fs.rmdirSync(chunkDir);
+
 };
 
 // 注册路由

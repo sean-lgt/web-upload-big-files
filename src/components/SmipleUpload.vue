@@ -12,11 +12,12 @@ const currFile = ref({});
 //当前文件切块
 const fileChunkList = ref([]);
 
+const uploadInputFile = ref("uploadInputFile");
+
 //文件变化，文件上传
 const fileChange = async (event) => {
   const [file] = event.target.files;
   console.log(file);
-  // return false;
   if (!file) return;
   currFile.value = file;
   fileChunkList.value = [];
@@ -28,7 +29,10 @@ const fileChange = async (event) => {
 const uploadChunks = (fileHash) => {
   const requests = fileChunkList.value.map((item, index) => {
     const formData = new FormData();
-    formData.append(`${currFile.value.name}-${fileHash}-${index}`, item.chunk);
+    formData.append(
+      `${currFile.value.name}vtest-vtest${fileHash}vtest-vtest${index}`,
+      item.chunk
+    );
     formData.append("filename", currFile.value.name);
     formData.append("hash", `${fileHash}-${index}`);
     formData.append("fileHash", fileHash);
@@ -40,6 +44,11 @@ const uploadChunks = (fileHash) => {
       size: DEFAULT_CHUNK_SIZE,
       filename: currFile.value.name,
       // newFileName:
+    }).then((res) => {
+      console.log("🚀【上传成功了】", res);
+      if (res.data?.data?.code === 200) {
+        uploadInputFile.value.value = "";
+      }
     });
   });
 };
@@ -104,7 +113,7 @@ const onUploadProgress = (item) => (e) => {
 
 <template>
   <h1>大文件切片上传</h1>
-  <input type="file" @change="fileChange" />
+  <input type="file" ref="uploadInputFile" @change="fileChange" />
   <h2>总进度</h2>
   <div class="percentage total">
     <p class="bg" :style="`width:${totalPercentage || 0}%`"></p>
