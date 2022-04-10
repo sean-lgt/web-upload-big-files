@@ -5,11 +5,13 @@ const koaBody = require('koa-body');
 const fs = require('fs');
 const path = require('path');
 const { nanoid } = require('nanoid')
+const koaStatic = require('koa-static');
 
 const outputPath = path.resolve(__dirname, 'resources');
 const app = new Koa();
 let currChunk = {}; // 当前 chunk 信息
-
+// 静态资源
+app.use(koaStatic(path.join(__dirname, 'resources')));
 /*  */
 // 处理跨域
 app.use(cors({
@@ -24,8 +26,10 @@ app.use(cors({
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
 }));
 
+
 // 处理 body 数据
 app.use(koaBody({}));
+
 
 // 上传请求
 router.post(
