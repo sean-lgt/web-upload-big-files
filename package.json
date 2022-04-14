@@ -3,8 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --mode development",
+    "test": "vite --mode test",
+    "build": "vite build --mode production",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "koa-static": "^5.0.0",
     "koa2-cors": "^2.0.6",
     "nanoid": "^3.3.2",
+    "pushstate-server": "^3.1.0",
     "spark-md5": "^3.0.2",
     "vue": "^3.2.25"
   },

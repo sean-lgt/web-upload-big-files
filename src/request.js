@@ -1,7 +1,8 @@
 import axios from 'axios'
 
-const baseURL = 'http://localhost:3002'
-
+export const baseURL =
+  import.meta.env.VITE_APP_SERVICE_URL //通过环境变量取值
+console.log('🚀【baseURL】', baseURL);
 /**
  * @description: 上传文件
  * @return {*} 

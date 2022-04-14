@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import * as SparkMD5 from "spark-md5"; //引入md5切片
-import { uploadFile, mergeChunks } from "../request";
+import { uploadFile, mergeChunks, baseURL } from "../request";
 
 // 默认切块大小
 const DEFAULT_CHUNK_SIZE = 1 * 1024 * 1024; //默认1M
@@ -117,8 +117,8 @@ const onUploadProgress = (item) => (e) => {
 
 // 文件链接根据环境变量判断
 const formateFileLink = (originLink) => {
-  const BASE_URL = "http://127.0.0.1:3002";
-  return BASE_URL + originLink;
+  // const BASE_URL = "http://127.0.0.1:3002";
+  return baseURL + originLink;
 };
 </script>
 
