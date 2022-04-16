@@ -134,7 +134,17 @@ const mergeFileChunk = async (filePath, filename, size) => {
   );
 
   // 合并后删除保存切片的目录
-  fs.rmdirSync(chunkDir);
+  // fs.mrdir(chunkDir)
+  // fs.rmdirSync(chunkDir);
+  // 直接删除空的文件目录
+  fs.rmdir(chunkDir, function(error) {
+    if (error) {
+      console.log(error);
+      return false;
+    }
+    console.log('删除目录成功');
+    return true
+  })
 
 };
 

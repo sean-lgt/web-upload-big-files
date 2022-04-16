@@ -118,7 +118,8 @@ const onUploadProgress = (item) => (e) => {
 // 文件链接根据环境变量判断
 const formateFileLink = (originLink) => {
   // const BASE_URL = "http://127.0.0.1:3002";
-  return baseURL + originLink;
+  const baseResourceURL = import.meta.env.VITE_APP_RESOURCE_URL;
+  return baseResourceURL + originLink;
 };
 </script>
 
